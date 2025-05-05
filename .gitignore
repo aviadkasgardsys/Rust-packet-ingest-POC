@@ -1,0 +1,31 @@
+# === Cargo-specific ===
+# Ignore build artifacts (compiled outputs, incremental compilation, etc.)
+/target/     
+# Leave Cargo.lock in version control for binaries; remove if you're a library
+Cargo.lock                    
+
+# Backup files created by rustfmt
+**/*.rs.bk                        
+# === IDE / Editor ===
+# Visual Studio Code workspace settings
+.vscode/                              
+# IntelliJ IDEA project files
+.idea/                            
+
+# === Miscellaneous ===
+# OS-generated files
+.DS_Store                        # macOS Finder metadata
+Thumbs.db                          # Windows Explorer metadata
+# Temporary editor swap files
+*~                                              # Emacs/Vim backup
+*.swp                                           # Vim swap files
+
+# === Other generated files ===
+# If you use a build script directory or scripts
+build/                                          # custom build artifacts
+
+# === Optional: C/C++ dependencies (if any) ===
+# *.d                                  
+# *.o                                  
+# *.so                                 
+# *.dll                                

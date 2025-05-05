@@ -1,0 +1,3 @@
+[workspace]
+members = ["packet_ingest-lib", "packet_ingest-server"]
+resolver = "3"

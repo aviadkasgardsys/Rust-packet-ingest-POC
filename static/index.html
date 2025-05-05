@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <title>Live Packet Rate</title>
+    <!-- μPlot CSS -->
+    <link
+      href="https://unpkg.com/uplot@1.6.32/dist/uPlot.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      /* Reset and full‐screen container */
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 90%;
+        width: 90%;
+      }
+      #chart {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="chart"></div>
+
+    <!-- μPlot JS -->
+    <script src="https://unpkg.com/uplot@1.6.32/dist/uPlot.iife.min.js"></script>
+    <!-- Application JS -->
+    <script src="app2.js"></script>
+  </body>
+</html>

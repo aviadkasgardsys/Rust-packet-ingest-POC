@@ -1,0 +1,17 @@
+[package]
+name = "packet_ingest-server"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+packet_ingest-lib = { path = "../packet_ingest-lib" }
+warp = { version = "0.3" } 
+tokio              = { version = "1", features = ["full"] }
+# Logging
+log        = "0.4"
+env_logger = "0.10"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+async-stream = "0.3"
+dotenv = "0.15"
+futures-util = "0.3"
