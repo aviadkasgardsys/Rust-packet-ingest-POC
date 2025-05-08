@@ -58,7 +58,7 @@ async function initLiveGraph() {
   }
   
   @fragment
-  fn fs_main(in: VertexOut) -> @location(0) vec4<f32> {
+  fn fs_main(in: דVertexOut) -> @location(0) vec4<f32> {
     return in.color;
   }
   `;
@@ -95,10 +95,9 @@ async function initLiveGraph() {
   
   @fragment
   fn fs_axis() -> @location(0) vec4<f32> {
-    return vec4(0.5, 0.5, 0.5, 1.0);
+    return vec4(1.0, 1.0, 1.0, 1.0);
   }
   `;
-
   // Shader that outputs a constant grey
   const axisModule = device.createShaderModule({ code: axisWGSL });
   const axisPipeline = device.createRenderPipeline({
@@ -121,18 +120,51 @@ async function initLiveGraph() {
     primitive: { topology: "line-list" },
   });
 
-  // Upload axes (2 segments)
+  // Upload axes (2 segments): X stays centered vertically, Y pinned to left edge
   const axisVerts = new Float32Array([
-    // X axis
-    -1, 0, 1, 0,
-    // Y axis
-    0, -1, 0, 1,
+    // X axis: from (-1, 0) → (1, 0)
+    -1, -1, 1, -1,
+    // Y axis: from (0, -1) → (0, 1)
+    -1, -1, -1, 1,
   ]);
+
   const axisBuffer = device.createBuffer({
     size: axisVerts.byteLength,
     usage: GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST,
   });
+
+  const gridWGSL = `
+   struct AxisIn {
+    @location(0) xy: vec2<f32>,
+  };   
+  @vertex fn vs_grid(in: AxisIn) -> @builtin(position) vec4<f32> {
+    return vec4(in.xy,0.0,1.0);
+  }
+  @fragment fn fs_grid() -> @location(0) vec4<f32> {
+    return vec4(0.5, 0.5, 0.5, 1.0);
+  }
+`;
   device.queue.writeBuffer(axisBuffer, 0, axisVerts);
+  const gridModule = device.createShaderModule({ code: gridWGSL });
+  const gridPipeline = device.createRenderPipeline({
+    layout: "auto",
+    vertex: {
+      module: gridModule,
+      entryPoint: "vs_grid",
+      buffers: [
+        {
+          arrayStride: 8,
+          attributes: [{ shaderLocation: 0, offset: 0, format: "float32x2" }],
+        },
+      ],
+    },
+    fragment: {
+      module: gridModule,
+      entryPoint: "fs_grid",
+      targets: [{ format }],
+    },
+    primitive: { topology: "line-list" },
+  });
 
   // Upload grid lines every 10s (6 vertical + 6 horizontal)
   const gridVerts = [];
@@ -329,11 +361,12 @@ async function initLiveGraph() {
     });
 
     // 1) grid
-    pass.setPipeline(axisPipeline);
+    pass.setPipeline(gridPipeline);
     pass.setVertexBuffer(0, gridBuffer);
     pass.draw(gridVerts.length / 2, 1, 0, 0);
 
     // 2) axes
+    pass.setPipeline(axisPipeline);
     pass.setVertexBuffer(0, axisBuffer);
     pass.draw(4, 1, 0, 0);
 

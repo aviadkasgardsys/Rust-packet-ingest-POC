@@ -14,6 +14,9 @@ use packet_ingest_lib::{
 };
 use tokio::task;
 
+/* sudo RUST_LOG=packet_ingest_lib=trace,packet_ingest_server=info \
+cargo run -p packet_ingest-server */
+
 #[tokio::main(flavor = "multi_thread", worker_threads = 8)]
 async fn main() -> Result<(), Box<dyn Error>> {
     // ──────── ① Load .env or fail ────────
