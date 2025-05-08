@@ -38,7 +38,6 @@ async function initLiveGraph() {
   resize();
 
   const wgsl = `
-
   struct VertexIn {
     @location(0) xy: vec2<f32>,
   };                                
@@ -58,7 +57,7 @@ async function initLiveGraph() {
   }
   
   @fragment
-  fn fs_main(in: דVertexOut) -> @location(0) vec4<f32> {
+  fn fs_main(in: VertexOut) -> @location(0) vec4<f32> {
     return in.color;
   }
   `;
@@ -137,10 +136,12 @@ async function initLiveGraph() {
    struct AxisIn {
     @location(0) xy: vec2<f32>,
   };   
-  @vertex fn vs_grid(in: AxisIn) -> @builtin(position) vec4<f32> {
+  @vertex
+  fn vs_grid(in: AxisIn) -> @builtin(position) vec4<f32> {
     return vec4(in.xy,0.0,1.0);
   }
-  @fragment fn fs_grid() -> @location(0) vec4<f32> {
+  @fragment
+  fn fs_grid() -> @location(0) vec4<f32> {
     return vec4(0.5, 0.5, 0.5, 1.0);
   }
 `;
